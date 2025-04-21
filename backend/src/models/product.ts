@@ -1,5 +1,4 @@
-import exp from "constants";
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IFile {
   fileName: string;
@@ -18,43 +17,43 @@ const ProductSchema: Schema<IProduct> = new Schema<IProduct>(
   {
     title: {
       type: String,
-      required: [true, "Поле title должно быть заполнено"],
+      required: [true, 'Поле title должно быть заполнено'],
       unique: true,
-      minlength: [2, "Минимальная длина поля title - 2 символа"],
-      maxlength: [30, "Максимальная длина поля title - 30 символа"],
+      minlength: [2, 'Минимальная длина поля title - 2 символа'],
+      maxlength: [30, 'Максимальная длина поля title - 30 символа'],
     },
     image: {
       fileName: {
         type: String,
-        required: [true, "Поле filename должно быть заполнено"],
+        required: [true, 'Поле filename должно быть заполнено'],
       },
       originalName: {
         type: String,
-        required: [true, "Поле originalName должно быть заполнено"],
+        required: [true, 'Поле originalName должно быть заполнено'],
       },
     },
     category: {
       type: String,
-      required: [true, "Поле category должно быть заполнено"],
+      required: [true, 'Поле category должно быть заполнено'],
     },
     description: {
       type: String,
-      default: "",
+      default: '',
     },
     price: {
       type: Number,
       default: null,
       validate: {
         validator: (value: number | null) => value === null || value >= 0,
-        message: "Цена не может быть отрицательной",
+        message: 'Цена не может быть отрицательной',
       },
     },
   },
   {
     timestamps: true,
-  }
+  },
 );
 
-const Product = mongoose.model<IProduct>("product", ProductSchema);
+const Product = mongoose.model<IProduct>('product', ProductSchema);
 
 export default Product;

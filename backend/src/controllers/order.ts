@@ -1,12 +1,12 @@
-import { Request, Response, NextFunction } from "express";
-import { faker } from "@faker-js/faker";
-import BadRequestError from "../errors/badRequestError";
-import Product from "../models/product";
+import { Request, Response, NextFunction } from 'express';
+import { faker } from '@faker-js/faker';
+import BadRequestError from '../errors/badRequestError';
+import Product from '../models/product';
 
 export default async function createOrder(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const { total, items } = req.body;
@@ -17,17 +17,17 @@ export default async function createOrder(
     });
     if (products.length !== items.length) {
       return next(
-        new BadRequestError("Некоторые товары отсутствуют или не продаются.")
+        new BadRequestError('Некоторые товары отсутствуют или не продаются.'),
       );
     }
 
     const finalTotal = products.reduce(
       (acc, product) => acc + (product.price || 0),
-      0
+      0,
     );
     if (finalTotal !== total) {
       return next(
-        new BadRequestError("Стоимость товаров не совпадает с общей суммой.")
+        new BadRequestError('Стоимость товаров не совпадает с общей суммой.'),
       );
     }
 

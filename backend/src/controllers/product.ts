@@ -1,13 +1,14 @@
-import { Request, Response, NextFunction } from "express";
-import BadRequestError from "../errors/badRequestError";
-import NotFoundError from "../errors/notFoundError";
-import ConflictError from "../errors/conflictError";
-import Product from "../models/product";
+import { Request, Response, NextFunction } from 'express';
+import BadRequestError from '../errors/badRequestError';
+import NotFoundError from '../errors/notFoundError';
+import ConflictError from '../errors/conflictError';
+import Product from '../models/product';
+import mongoose from 'mongoose';
 
 export const getAllProducts = async (
   _req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const products = await Product.find();
@@ -23,7 +24,7 @@ export const getAllProducts = async (
 export const createProduct = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { title, image, category, description, price } = req.body;
@@ -39,12 +40,12 @@ export const createProduct = async (
     const savedProduct = await newProduct.save();
     return res.status(201).json(savedProduct);
   } catch (error: any) {
-    if (error instanceof Error && error.message.includes("E11000")) {
-      return next(new ConflictError("Товар с таким названием уже существует"));
+    if (error instanceof Error && error.message.includes('E11000')) {
+      return next(new ConflictError('Товар с таким названием уже существует'));
     }
-    if (error.name === "ValidationError") {
+    if (error.name === 'ValidationError') {
       return next(
-        new BadRequestError("Ошибка валидации данных при создании товара")
+        new BadRequestError('Ошибка валидации данных при создании товара'),
       );
     }
 
@@ -55,13 +56,19 @@ export const createProduct = async (
 export async function getProductById(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return next(new BadRequestError('Некорректный ID товара'));
+    }
+
     const product = await Product.findById(req.params.id);
 
     if (!product) {
-      return next(new NotFoundError("Товар не найден"));
+      return next(new NotFoundError('Товар не найден'));
     }
 
     return res.status(200).json({
