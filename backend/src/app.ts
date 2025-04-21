@@ -29,7 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', productRouter);
 app.use('/', orderRouter);
 
-app.use((_req, res, next) => {
+app.use((_req, _res, next) => {
   next(new NotFoundError('Маршрут не найден'));
 });
 
@@ -37,6 +37,4 @@ app.use(errorLogger);
 app.use(errors());
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log('listening on port 3000');
-});
+app.listen(PORT);

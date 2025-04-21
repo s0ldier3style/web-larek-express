@@ -1,9 +1,9 @@
+import mongoose from 'mongoose';
 import { Request, Response, NextFunction } from 'express';
 import BadRequestError from '../errors/badRequestError';
 import NotFoundError from '../errors/notFoundError';
 import ConflictError from '../errors/conflictError';
 import Product from '../models/product';
-import mongoose from 'mongoose';
 
 export const getAllProducts = async (
   _req: Request,
